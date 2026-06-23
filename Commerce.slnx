@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/Commerce.BuildingBlocks.Domain/Commerce.BuildingBlocks.Domain.csproj" />
+  </Folder>
   <Folder Name="/Gateways/">
     <Project Path="src/Gateways/Commerce.Gateway/Commerce.Gateway.csproj" />
   </Folder>
