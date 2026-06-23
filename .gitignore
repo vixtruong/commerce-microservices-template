@@ -1,0 +1,46 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+artifacts/
+
+# IDEs and user settings
+.vs/
+.vscode/
+.idea/
+.agents/
+.codex/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Test and coverage output
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+secrets.json
+
+# Logs and local data
+*.log
+logs/
+data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Containers
+docker-compose.override.yml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+!**/packages/build/
