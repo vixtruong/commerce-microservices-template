@@ -1,5 +1,6 @@
-using Catalog.Application;
+using Catalog.Application.Abstractions;
 using Catalog.Infrastructure.Persistence;
+using Catalog.Infrastructure.Persistence.Repositories;
 using Commerce.BuildingBlocks.Application.Persistence;
 using Commerce.BuildingBlocks.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -9,53 +10,58 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Catalog.Infrastructure;
 
 /// <summary>
-/// Registers Catalog infrastructure services with the dependency injection container.
+/// Registers Catalog infrastructure services.
 /// </summary>
 public static class DependencyInjection
 {
-    private const string CatalogConnectionStringName = "CatalogDb";
+    private const string ConnectionStringName = "CatalogDb";
 
     /// <summary>
-    /// Adds the Catalog SQL Server context, unit of work, and application event handlers.
+    /// Adds Catalog persistence and repository implementations.
     /// </summary>
-    /// <param name="services">The service collection to configure.</param>
-    /// <param name="configuration">The host configuration containing the Catalog connection string.</param>
+    /// <param name="services">Dependency injection service collection.</param>
+    /// <param name="configuration">
+    /// Host configuration containing the Catalog connection string.
+    /// </param>
     /// <returns>The configured service collection.</returns>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when the <c>CatalogDb</c> connection string is missing.
+    /// Thrown when the Catalog connection string is missing.
     /// </exception>
     public static IServiceCollection AddCatalogInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        string connectionString = configuration.GetConnectionString(CatalogConnectionStringName)
+        string connectionString =
+            configuration.GetConnectionString(ConnectionStringName)
             ?? throw new InvalidOperationException(
-                $"Connection string '{CatalogConnectionStringName}' was not configured.");
-
-        string? mediatRLicenseKey = configuration["MediatR:LicenseKey"];
-
-        services.AddMediatR(mediatRConfiguration =>
-        {
-            mediatRConfiguration.RegisterServicesFromAssembly(AssemblyReference.Assembly);
-
-            // MediatR 14 requires a production license. Keeping the key in external
-            // configuration prevents credentials from being committed to source control.
-            if (!string.IsNullOrWhiteSpace(mediatRLicenseKey))
-            {
-                mediatRConfiguration.LicenseKey = mediatRLicenseKey;
-            }
-        });
+                $"Connection string '{ConnectionStringName}' " +
+                "was not configured.");
 
         services.AddDbContext<CatalogDbContext>(options =>
+        {
             options.UseSqlServer(
                 connectionString,
                 sqlServerOptions =>
                 {
-                    sqlServerOptions.MigrationsAssembly(typeof(CatalogDbContext).Assembly.FullName);
-                    sqlServerOptions.EnableRetryOnFailure(maxRetryCount: 3);
-                }));
+                    sqlServerOptions.MigrationsAssembly(
+                        typeof(CatalogDbContext).Assembly.FullName);
 
-        services.AddScoped<IUnitOfWork, EfUnitOfWork<CatalogDbContext>>();
+                    sqlServerOptions.EnableRetryOnFailure(
+                        maxRetryCount: 3);
+                });
+        });
+
+        services.AddScoped<
+            IUnitOfWork,
+            EfUnitOfWork<CatalogDbContext>>();
+
+        services.AddScoped<
+            IProductRepository,
+            ProductRepository>();
+
+        services.AddScoped<
+            IStockItemRepository,
+            StockItemRepository>();
 
         return services;
     }

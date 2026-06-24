@@ -39,7 +39,9 @@ internal sealed class StockReservationConfiguration : IEntityTypeConfiguration<S
             .IsRequired();
 
         builder.Property(reservation => reservation.Status)
-            .HasConversion<int>()
+            // Persist the enum name so operational reservation states are self-describing in the database.
+            .HasConversion<string>()
+            .HasMaxLength(32)
             .IsRequired();
 
         builder.Property(reservation => reservation.CreatedAtUtc)

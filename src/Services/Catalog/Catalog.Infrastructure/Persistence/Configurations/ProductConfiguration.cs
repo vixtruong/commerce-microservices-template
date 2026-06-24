@@ -41,7 +41,9 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
             .IsRequired();
 
         builder.Property(product => product.Status)
-            .HasConversion<int>()
+            // Persist the enum name so database values remain readable and do not depend on numeric ordering.
+            .HasConversion<string>()
+            .HasMaxLength(32)
             .IsRequired();
 
         builder.Property(product => product.CreatedAtUtc)
