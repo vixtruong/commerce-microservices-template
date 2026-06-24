@@ -1,4 +1,5 @@
 ﻿using Catalog.Application.Abstractions;
+using Catalog.Domain.Products;
 using Commerce.BuildingBlocks.Application.Persistence;
 using Commerce.BuildingBlocks.Domain.Results;
 using MediatR;
@@ -31,7 +32,38 @@ namespace Catalog.Application.Products.Commands.CreateProduct
         /// <returns>The created product identifier or a validation error.</returns>
         public async Task<Result<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            string normalizedSku = request.Sku.Trim().ToUpperInvariant();
+
+            bool skuExists = await _productRepository.ExistsBySkuAsync(normalizedSku, cancellationToken);
+
+            if (skuExists)
+            {
+                return Result<CreateProductResponse>.Failure(
+                    Error.Conflict(
+                        "Catalog.Product.SkuAlreadyExists",
+                        $"Product SKU '{normalizedSku}' already exists."));
+            }
+
+            Result<Product> productResult = Product.Create(
+                normalizedSku,
+                request.Name,
+                request.Description,
+                request.PriceAmount,
+                request.PriceCurrency,
+                DateTimeOffset.UtcNow);
+
+            if (productResult.IsFailure)
+            {
+                return productResult.Error;
+            }
+
+            Product product = productResult.Value;
+
+            _productRepository.Add(product);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return new CreateProductResponse(product.Id.Value);
         }
     }
 }

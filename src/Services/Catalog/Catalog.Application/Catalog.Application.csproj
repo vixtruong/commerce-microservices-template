@@ -5,10 +5,6 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Commerce.BuildingBlocks.Application\Commerce.BuildingBlocks.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Products\Queries\" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
