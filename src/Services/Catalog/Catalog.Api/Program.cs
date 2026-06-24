@@ -14,7 +14,10 @@ builder.Services.AddCatalogInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-await app.Services.MigrateCatalogDatabaseAsync();
+if (!app.Environment.IsProduction())
+{
+    await app.Services.MigrateCatalogDatabaseAsync();
+}
 
 app.UseCommerceRequestLogging();
 
