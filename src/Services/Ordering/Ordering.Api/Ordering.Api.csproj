@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Ordering.Application\Ordering.Application.csproj" />
     <ProjectReference Include="..\Ordering.Infrastructure\Ordering.Infrastructure.csproj" />
     <ProjectReference Include="..\Ordering.Contracts\Ordering.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Commerce.BuildingBlocks.Infrastructure\Commerce.BuildingBlocks.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

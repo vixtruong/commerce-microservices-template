@@ -4,6 +4,11 @@ namespace Catalog.Domain.Products
 {
     public static class ProductErrors
     {
+        public static readonly Error SkuRequired =
+            Error.Validation(
+                "Catalog.Product.SkuRequired",
+                "Product SKU is required.");
+
         public static readonly Error NameRequired =
             Error.Validation(
                 "Catalog.Product.NameRequired",

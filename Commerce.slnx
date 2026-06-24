@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/BuildingBlocks/">
     <Project Path="src/BuildingBlocks/Commerce.BuildingBlocks.Domain/Commerce.BuildingBlocks.Domain.csproj" />
+    <Project Path="src/BuildingBlocks/Commerce.BuildingBlocks.Application/Commerce.BuildingBlocks.Application.csproj" />
+    <Project Path="src/BuildingBlocks/Commerce.BuildingBlocks.Infrastructure/Commerce.BuildingBlocks.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/Gateways/">
     <Project Path="src/Gateways/Commerce.Gateway/Commerce.Gateway.csproj" />
