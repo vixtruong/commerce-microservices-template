@@ -25,6 +25,11 @@ coverage/
 .env.*
 !.env.example
 appsettings.Local.json
+appsettings.*.Local.json
+appsettings.Secrets.json
+appsettings.*.Secrets.json
+*.local.json
+*.secrets.json
 secrets.json
 
 # Logs and local data
