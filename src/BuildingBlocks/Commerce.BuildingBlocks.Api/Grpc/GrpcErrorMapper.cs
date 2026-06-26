@@ -20,7 +20,8 @@ public static class GrpcErrorMapper
         return new RpcException(
             new Status(
                 ToStatusCode(error.Type),
-                error.Message));
+                error.Message),
+            GrpcErrorMetadata.CreateTrailers(error.Code));
     }
 
     /// <summary>
@@ -33,7 +34,8 @@ public static class GrpcErrorMapper
         return new RpcException(
             new Status(
                 StatusCode.InvalidArgument,
-                message));
+                message),
+            GrpcErrorMetadata.CreateTrailers(GrpcErrorCodes.InvalidArgument));
     }
 
     /// <summary>

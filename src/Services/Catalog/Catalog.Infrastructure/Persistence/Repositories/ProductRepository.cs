@@ -18,6 +18,13 @@ namespace Catalog.Infrastructure.Persistence.Repositories
             _dbContext.Products.Add(product);
         }
 
+        public async Task<bool> ExistsByIdAsync(ProductId productId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Products
+                .AsNoTracking()
+                .AnyAsync(p => p.Id == productId, cancellationToken);
+        }
+
         public async Task<bool> ExistsBySkuAsync(string sku, CancellationToken cancellationToken)
         {
             return await _dbContext.Products

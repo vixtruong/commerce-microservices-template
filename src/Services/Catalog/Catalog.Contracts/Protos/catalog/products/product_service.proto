@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option csharp_namespace = "Catalog.Contracts.Grpc.Products";
+
+package catalog.products.v1;
+
+import "catalog/products/product_messages.proto";
+
+service ProductGrpc {
+  rpc GetProductById(GetProductByIdRequest) returns (ProductReply);
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductReply);
+}

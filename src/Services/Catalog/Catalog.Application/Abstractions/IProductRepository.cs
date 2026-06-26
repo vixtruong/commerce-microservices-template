@@ -36,5 +36,9 @@ namespace Catalog.Application.Abstractions
         Task<bool> ExistsBySkuAsync(
             string sku,
             CancellationToken cancellationToken);
+
+        Task<bool> ExistsByIdAsync(
+            ProductId productId,
+            CancellationToken cancellationToken);
     }
 }

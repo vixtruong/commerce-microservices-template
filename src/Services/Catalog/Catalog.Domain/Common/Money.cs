@@ -23,25 +23,19 @@ namespace Catalog.Domain.Common
         {
             if (amount < 0)
             {
-                return Error.Validation(
-                    "Catalog.Money.AmountNegative",
-                    "Money amount must not be negative.");
+                return MoneyErrors.AmountNegative;
             }
 
             if (string.IsNullOrWhiteSpace(currency))
             {
-                return Error.Validation(
-                    "Catalog.Money.CurrencyRequired",
-                    "Currency is required.");
+                return MoneyErrors.CurrencyRequired;
             }
 
             string normalizedCurrency = currency.Trim().ToUpperInvariant();
 
             if (normalizedCurrency.Length != 3)
             {
-                return Error.Validation(
-                    "Catalog.Money.CurrencyInvalid",
-                    "Currency must contain exactly three characters.");
+                return MoneyErrors.CurrencyInvalid;
             }
 
             return new Money(decimal.Round(amount, 2), normalizedCurrency);

@@ -1,13 +1,8 @@
 syntax = "proto3";
 
-option csharp_namespace = "Catalog.Contracts.Grpc";
+option csharp_namespace = "Catalog.Contracts.Grpc.Products";
 
-package catalog.v1;
-
-service CatalogGrpc {
-  rpc GetProductById(GetProductByIdRequest) returns (ProductReply);
-  rpc CreateProduct(CreateProductRequest) returns (CreateProductReply);
-}
+package catalog.products.v1;
 
 message GetProductByIdRequest {
   string product_id = 1;

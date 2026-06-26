@@ -1,6 +1,7 @@
 ﻿using Catalog.Application.Products.Commands.CreateProduct;
 using Catalog.Application.Products.Queries.GetProductById;
-using Catalog.Contracts.Grpc;
+using Catalog.Contracts.Grpc.Products;
+using Catalog.Domain.Products;
 using Commerce.BuildingBlocks.Api.Grpc;
 using Commerce.BuildingBlocks.Domain.Results;
 using Grpc.Core;
@@ -12,15 +13,15 @@ namespace Catalog.Api.Services
     /// <summary>
     /// Exposes Catalog application use cases through the internal gRPC contract.
     /// </summary>
-    public sealed class CatalogGrpcService : CatalogGrpc.CatalogGrpcBase
+    public sealed class ProductGrpcService : ProductGrpc.ProductGrpcBase
     {
         private readonly ISender _sender;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CatalogGrpcService"/> class.
+        /// Initializes a new instance of the <see cref="ProductGrpcService"/> class.
         /// </summary>
         /// <param name="sender">MediatR sender used to execute Catalog commands and queries.</param>
-        public CatalogGrpcService(ISender sender)
+        public ProductGrpcService(ISender sender)
         {
             _sender = sender;
         }
@@ -37,7 +38,7 @@ namespace Catalog.Api.Services
         {
             if (!Guid.TryParse(request.ProductId, out Guid productId))
             {
-                throw GrpcErrorMapper.InvalidArgument("Product id is invalid.");
+                throw GrpcErrorMapper.ToRpcException(ProductErrors.IdInvalid);
             }
 
             Result<ProductResponse> result = await _sender.Send(
@@ -64,7 +65,7 @@ namespace Catalog.Api.Services
         {
             if (!decimal.TryParse(request.PriceAmount, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal priceAmount))
             {
-                throw GrpcErrorMapper.InvalidArgument("Price amount is invalid.");
+                throw GrpcErrorMapper.ToRpcException(ProductErrors.PriceAmountInvalid);
             }
 
             Result<CreateProductResponse> result = await _sender.Send(

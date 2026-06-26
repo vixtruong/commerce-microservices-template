@@ -26,10 +26,7 @@ namespace Catalog.Application.Products.Queries.GetProductById
         {
             if (request.ProductId == Guid.Empty)
             {
-                return Result<ProductResponse>.Failure(
-                    Error.Validation(
-                        "Catalog.Product.IdRequired",
-                        "Product id is required."));
+                return Result<ProductResponse>.Failure(ProductErrors.IdRequired);
             }
 
             ProductId productId = ProductId.From(request.ProductId);
@@ -38,10 +35,7 @@ namespace Catalog.Application.Products.Queries.GetProductById
 
             if (product is null)
             {
-                return Result<ProductResponse>.Failure(
-                    Error.NotFound(
-                        "Catalog.Product.NotFound",
-                        $"Product with id '{request.ProductId}' was not found."));
+                return Result<ProductResponse>.Failure(ProductErrors.NotFound(productId));
             }
 
             ProductResponse response = new(

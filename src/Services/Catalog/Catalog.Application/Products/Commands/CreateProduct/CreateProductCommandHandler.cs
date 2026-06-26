@@ -39,9 +39,7 @@ namespace Catalog.Application.Products.Commands.CreateProduct
             if (skuExists)
             {
                 return Result<CreateProductResponse>.Failure(
-                    Error.Conflict(
-                        "Catalog.Product.SkuAlreadyExists",
-                        $"Product SKU '{normalizedSku}' already exists."));
+                    ProductErrors.SkuAlreadyExists(normalizedSku));
             }
 
             Result<Product> productResult = Product.Create(
