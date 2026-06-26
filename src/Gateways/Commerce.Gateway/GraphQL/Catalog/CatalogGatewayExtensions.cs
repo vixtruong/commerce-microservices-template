@@ -1,4 +1,6 @@
-using Catalog.Contracts.Grpc;
+using Catalog.Contracts.Grpc.Inventory;
+using Catalog.Contracts.Grpc.Products;
+using Commerce.Gateway.GraphQL.Catalog.Inventory;
 using Commerce.Gateway.GraphQL.Catalog.Products;
 using HotChocolate.Execution.Configuration;
 
@@ -24,19 +26,28 @@ namespace Commerce.Gateway.GraphQL.Catalog
             this IRequestExecutorBuilder builder,
             IConfiguration configuration)
         {
-            builder.Services
-                .AddGrpcClient<CatalogGrpc.CatalogGrpcClient>(options =>
-                {
-                    string catalogAddress = configuration[CatalogGrpcClientConfigurationKey]
+
+            string catalogAddress = configuration[CatalogGrpcClientConfigurationKey]
                         ?? throw new InvalidOperationException(
                             $"{CatalogGrpcClientConfigurationKey} was not configured.");
 
+            builder.Services
+                .AddGrpcClient<ProductGrpc.ProductGrpcClient>(options =>
+                {
+                    options.Address = new Uri(catalogAddress);
+                });
+
+            builder.Services
+                .AddGrpcClient<InventoryGrpc.InventoryGrpcClient>(options =>
+                {
                     options.Address = new Uri(catalogAddress);
                 });
 
             builder
                 .AddTypeExtension<ProductQueries>()
-                .AddTypeExtension<ProductMutations>();
+                .AddTypeExtension<ProductMutations>()
+                .AddTypeExtension<InventoryQueries>()
+                .AddTypeExtension<InventoryMutations>();
 
             return builder;
         }

@@ -1,7 +1,6 @@
-﻿using Catalog.Contracts.Grpc;
+﻿using Catalog.Contracts.Grpc.Products;
 using Commerce.Gateway.GraphQL.Common;
 using Grpc.Core;
-using HotChocolate.Types;
 using System.Globalization;
 
 namespace Commerce.Gateway.GraphQL.Catalog.Products
@@ -22,7 +21,7 @@ namespace Commerce.Gateway.GraphQL.Catalog.Products
         /// <returns>The product when found; otherwise null.</returns>
         public async Task<ProductDto?> GetProductByIdAsync(
             Guid productId,
-            [Service] CatalogGrpc.CatalogGrpcClient client,
+            [Service] ProductGrpc.ProductGrpcClient client,
             CancellationToken cancellationToken)
         {
             try

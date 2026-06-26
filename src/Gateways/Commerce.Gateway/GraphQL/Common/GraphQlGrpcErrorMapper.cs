@@ -1,3 +1,4 @@
+using Commerce.BuildingBlocks.Api.Grpc;
 using Grpc.Core;
 using HotChocolate;
 
@@ -17,10 +18,13 @@ public static class GraphQlGrpcErrorMapper
     {
         ArgumentNullException.ThrowIfNull(exception);
 
+        string errorCode = GrpcErrorMetadata.GetErrorCode(exception)
+            ?? GrpcErrorCodes.FromStatusCode(exception.StatusCode);
+
         return new GraphQLException(
             ErrorBuilder.New()
                 .SetMessage(exception.Status.Detail)
-                .SetCode(exception.StatusCode.ToString())
+                .SetCode(errorCode)
                 .Build());
     }
 }

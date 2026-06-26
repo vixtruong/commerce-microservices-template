@@ -1,4 +1,4 @@
-using Catalog.Contracts.Grpc;
+﻿using Catalog.Contracts.Grpc.Products;
 using Commerce.Gateway.GraphQL.Common;
 using Grpc.Core;
 using HotChocolate.Types;
@@ -21,7 +21,7 @@ namespace Commerce.Gateway.GraphQL.Catalog.Products
         /// <returns>The created product payload.</returns>
         public async Task<CreateProductPayload> CreateProductAsync(
             CreateProductInput input,
-            [Service] CatalogGrpc.CatalogGrpcClient client,
+            [Service] ProductGrpc.ProductGrpcClient client,
             CancellationToken cancellationToken)
         {
             try
