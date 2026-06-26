@@ -1,6 +1,7 @@
 ﻿using Catalog.Contracts.Grpc;
 using Commerce.Gateway.GraphQL.Common;
 using Grpc.Core;
+using HotChocolate.Types;
 using System.Globalization;
 
 namespace Commerce.Gateway.GraphQL.Catalog.Products
@@ -8,6 +9,7 @@ namespace Commerce.Gateway.GraphQL.Catalog.Products
     /// <summary>
     /// GraphQL queries for Catalog product read operations.
     /// </summary>
+    [ExtendObjectType(OperationTypeNames.Query)]
     public sealed class ProductQueries
     {
 

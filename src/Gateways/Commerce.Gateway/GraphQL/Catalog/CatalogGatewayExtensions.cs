@@ -1,5 +1,6 @@
 using Catalog.Contracts.Grpc;
 using Commerce.Gateway.GraphQL.Catalog.Products;
+using HotChocolate.Execution.Configuration;
 
 namespace Commerce.Gateway.GraphQL.Catalog
 {
@@ -11,19 +12,19 @@ namespace Commerce.Gateway.GraphQL.Catalog
         private const string CatalogGrpcClientConfigurationKey = "GrpcClients:Catalog";
 
         /// <summary>
-        /// Adds Catalog gRPC clients and GraphQL schema types to the gateway.
+        /// Adds Catalog gRPC clients and GraphQL schema extensions to the gateway schema.
         /// </summary>
-        /// <param name="services">Dependency injection service collection.</param>
+        /// <param name="builder">GraphQL request executor builder.</param>
         /// <param name="configuration">Gateway configuration containing downstream service addresses.</param>
-        /// <returns>The configured service collection.</returns>
+        /// <returns>The configured GraphQL request executor builder.</returns>
         /// <exception cref="InvalidOperationException">
         /// Thrown when the Catalog gRPC client address is missing.
         /// </exception>
-        public static IServiceCollection AddCatalogGateway(
-            this IServiceCollection services,
+        public static IRequestExecutorBuilder AddCatalogGraphQL(
+            this IRequestExecutorBuilder builder,
             IConfiguration configuration)
         {
-            services
+            builder.Services
                 .AddGrpcClient<CatalogGrpc.CatalogGrpcClient>(options =>
                 {
                     string catalogAddress = configuration[CatalogGrpcClientConfigurationKey]
@@ -33,12 +34,11 @@ namespace Commerce.Gateway.GraphQL.Catalog
                     options.Address = new Uri(catalogAddress);
                 });
 
-            services
-                .AddGraphQLServer()
-                .AddQueryType<ProductQueries>()
-                .AddMutationType<ProductMutations>();
+            builder
+                .AddTypeExtension<ProductQueries>()
+                .AddTypeExtension<ProductMutations>();
 
-            return services;
+            return builder;
         }
     }
 }

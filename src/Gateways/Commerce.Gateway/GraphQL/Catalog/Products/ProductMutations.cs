@@ -1,6 +1,7 @@
 using Catalog.Contracts.Grpc;
 using Commerce.Gateway.GraphQL.Common;
 using Grpc.Core;
+using HotChocolate.Types;
 using System.Globalization;
 
 namespace Commerce.Gateway.GraphQL.Catalog.Products
@@ -8,6 +9,7 @@ namespace Commerce.Gateway.GraphQL.Catalog.Products
     /// <summary>
     /// GraphQL mutations for Catalog product write operations.
     /// </summary>
+    [ExtendObjectType(OperationTypeNames.Mutation)]
     public sealed class ProductMutations
     {
         /// <summary>

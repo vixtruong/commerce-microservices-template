@@ -1,10 +1,10 @@
 using Commerce.BuildingBlocks.Infrastructure.Logging;
-using Commerce.Gateway.GraphQL.Catalog;
+using Commerce.Gateway.GraphQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddCommerceSerilog();
-builder.Services.AddCatalogGateway(builder.Configuration);
+builder.Services.AddCommerceGraphQL(builder.Configuration);
 
 var app = builder.Build();
 
